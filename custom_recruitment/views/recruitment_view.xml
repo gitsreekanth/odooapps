@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	
+	<!-- Applicant -->
+	<!-- ========= -->
+
+	<!-- Applicant Form -->
+	<record model="ir.ui.view" id="applicant_form_inherit1">
+		<field name="name">applicant_form_inherit1</field>
+		<field name="model">hr.applicant</field>
+		<field name="inherit_id" ref="hr_recruitment.crm_case_form_view_job"/>
+		<field name="arch" type="xml">
+
+			<xpath expr="//form/sheet/div[2]/label" position="attributes">
+				<attribute name="string">Applicant Name</attribute>
+			</xpath>
+
+			<xpath expr="//form/sheet/div[2]/h2" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='partner_name']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='categ_ids']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='partner_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='medium_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='priority']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='description']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//form/sheet/separator" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='type_id']" position="after">
+				<field name="cv_receipt_date"/>
+				<field name="cv_recipient_id" options="{'no_create':true,'no_open':True}"/>
+			</xpath>
+
+			<xpath expr="//field[@name='source_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='reference']" position="before">
+				<field name="cv_source_id" options="{'no_create':true,'no_open':True}"/>
+			</xpath>
+
+			<xpath expr="//field[@name='department_id']" position="after">
+				<field name="hiring_area_ids" widget="many2many_tags"/>
+			</xpath>
+
+			<xpath expr="//field[@name='department_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='company_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+
+			<xpath expr="//sheet/group/group[4]/div/span" position="replace">
+				<span class="oe_inline" attrs="{'invisible':[('salary_expected_extra_ids','=',False)]}"> + </span>
+			</xpath>
+			<xpath expr="//field[@name='salary_expected_extra']" position="replace">
+				<field name="salary_expected_extra_ids" widget="many2many_tags" class="oe_inline" placeholder="Extra advantages..."/>
+			</xpath>
+
+			<xpath expr="//sheet/group/group[4]/div[2]/span" position="replace">
+				<span class="oe_inline" attrs="{'invisible':[('salary_proposed_extra_ids','=',False)]}"> + </span>
+			</xpath>
+			<xpath expr="//field[@name='salary_proposed_extra']" position="replace">
+				<field name="salary_proposed_extra_ids" widget="many2many_tags" class="oe_inline" placeholder="Extra advantages..."/>
+			</xpath>
+
+			<xpath expr="//field[@name='description']" position="after">
+				<group>
+					<group string="Potential">
+						<field name="assesment_potential" string="Assessment"/>
+						<field name="asses_potential_id" options="{'no_create':true,'no_open':True}"/>
+					</group>
+					<group string="Personality">
+						<field name="assesment_personality" string="Assessment"/>
+					</group>
+					<group string="Qualification">
+						<field name="assesment_qualification" string="Assessment"/>
+						<field name="asses_qualification_id" options="{'no_create':true,'no_open':True}"/>
+					</group>
+					<group string="Leadership">
+						<field name="assesment_leadership" string="Assessment"/>
+						<field name="asses_leadership_id" options="{'no_create':true,'no_open':True}"/>
+					</group>
+				</group>
+			</xpath>
+
+			<xpath expr="//field[@name='type_id']" position="attributes">
+				<attribute name="options">{'no_create':true,'no_open':True}</attribute>
+			</xpath>
+			<xpath expr="//field[@name='user_id']" position="attributes">
+				<attribute name="options">{'no_create':true,'no_open':True}</attribute>
+			</xpath>
+			<xpath expr="//field[@name='source_id']" position="attributes">
+				<attribute name="options">{'no_create':true,'no_open':True}</attribute>
+			</xpath>
+			
+		</field>
+	</record>
+
+	<!-- Applicant Tree -->
+	<record model="ir.ui.view" id="hr_applicant_tree_inherit">
+		<field name="name">hr_applicant_tree_inherit</field>
+		<field name="model">hr.applicant</field>
+		<field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="attributes">
+				<attribute name="string">Applicant Name</attribute>
+			</xpath>
+			<xpath expr="//field[@name='partner_name']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='priority']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='medium_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+		</field>
+	</record>
+
+	<!-- Applicant Kanban -->
+	<record model="ir.ui.view" id="hr_applicant_kanban_inherit">
+		<field name="name">hr_applicant_kanban_inherit</field>
+		<field name="model">hr.applicant</field>
+		<field name="inherit_id" ref="hr_recruitment.hr_kanban_view_applicant"/>
+		<field name="arch" type="xml">
+			<xpath expr="//kanban/templates/t[2]/div/div[2]/field[@name='job_id']" position="replace">
+				<t t-if="record.email_from.raw_value">Email: <field name="email_from"/><br/></t>
+			</xpath>
+			<xpath expr="//kanban/templates/t[2]/div/div[2]/div/div/field[@name='priority']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+		</field>
+	</record>
+
+
+	<!-- Potential -->
+	<!-- ========= -->
+
+	<record id="asses_potential_master_form" model="ir.ui.view">
+		<field name="name">asses_potential_master_form</field>
+		<field name="model">asses.potential.master</field>
+		<field name="arch" type="xml">
+			<form string="Potential">
+				<sheet>
+					<group>
+						<field name="name" required="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="asses_potential_master_tree" model="ir.ui.view">
+		<field name="name">asses_potential_master_tree</field>
+		<field name="model">asses.potential.master</field>
+		<field name="arch" type="xml">
+			<tree string="Potential">
+				<field name="name"></field>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_asses_potential_master" model="ir.actions.act_window">
+		<field name="name">Potential</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">asses.potential.master</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_asses_potential_master"
+		sequence= "101"
+		parent="hr_recruitment.menu_hr_recruitment_configuration"
+		name="Potential"
+		action="action_asses_potential_master"
+	/>
+
+	<!-- Qualification -->
+	<!-- ============= -->
+
+	<record id="asses_qualification_master_form" model="ir.ui.view">
+		<field name="name">asses_qualification_master_form</field>
+		<field name="model">asses.qualification.master</field>
+		<field name="arch" type="xml">
+			<form string="Qualification">
+				<sheet>
+					<group>
+						<field name="name" required="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="asses_qualification_master_tree" model="ir.ui.view">
+		<field name="name">asses_qualification_master_tree</field>
+		<field name="model">asses.qualification.master</field>
+		<field name="arch" type="xml">
+			<tree string="Qualification">
+				<field name="name"></field>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_asses_qualification_master" model="ir.actions.act_window">
+		<field name="name">Qualification</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">asses.qualification.master</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_asses_qualification_master"
+		sequence= "102"
+		parent="hr_recruitment.menu_hr_recruitment_configuration"
+		name="Qualification"
+		action="action_asses_qualification_master"
+	/>
+
+	<!-- Leadership -->
+	<!-- ========== -->
+
+	<record id="asses_leadership_master_form" model="ir.ui.view">
+		<field name="name">asses_leadership_master_form</field>
+		<field name="model">asses.leadership.master</field>
+		<field name="arch" type="xml">
+			<form string="Leadership">
+				<sheet>
+					<group>
+						<field name="name" required="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="asses_leadership_master_tree" model="ir.ui.view">
+		<field name="name">asses_leadership_master_tree</field>
+		<field name="model">asses.leadership.master</field>
+		<field name="arch" type="xml">
+			<tree string="Leadership">
+				<field name="name"></field>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_asses_leadership_master" model="ir.actions.act_window">
+		<field name="name">Leadership</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">asses.leadership.master</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_asses_leadership_master"
+		sequence= "103"
+		parent="hr_recruitment.menu_hr_recruitment_configuration"
+		name="Leadership"
+		action="action_asses_leadership_master"
+	/>
+
+	<!-- CV Source -->
+	<!-- ========= -->
+
+	<record id="cv_source_master_form" model="ir.ui.view">
+		<field name="name">cv_source_master_form</field>
+		<field name="model">cv.source.master</field>
+		<field name="arch" type="xml">
+			<form string="CV Source">
+				<sheet>
+					<group>
+						<field name="name" required="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="cv_source_master_tree" model="ir.ui.view">
+		<field name="name">cv_source_master_tree</field>
+		<field name="model">cv.source.master</field>
+		<field name="arch" type="xml">
+			<tree string="CV Source">
+				<field name="name"></field>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_cv_source_master" model="ir.actions.act_window">
+		<field name="name">CV Source</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">cv.source.master</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_cv_source_master"
+		sequence= "104"
+		parent="hr_recruitment.menu_hr_recruitment_configuration"
+		name="CV Source"
+		action="action_cv_source_master"
+	/>
+
+	<!-- Salary Extra Expected -->
+	<!-- ===================== -->
+
+	<record id="salary_extra_expected_form" model="ir.ui.view">
+		<field name="name">salary_extra_expected_form</field>
+		<field name="model">salary.extra.expected.master</field>
+		<field name="arch" type="xml">
+			<form string="Salary Expected">
+				<sheet>
+					<group>
+						<field name="name" required="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="salary_extra_expected_tree" model="ir.ui.view">
+		<field name="name">salary_extra_expected_tree</field>
+		<field name="model">salary.extra.expected.master</field>
+		<field name="arch" type="xml">
+			<tree string="Salary Expected">
+				<field name="name"></field>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_salary_extra_expected" model="ir.actions.act_window">
+		<field name="name">Salary Expected</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">salary.extra.expected.master</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_salary_extra_expected"
+		sequence= "105"
+		parent="hr_recruitment.menu_hr_recruitment_configuration"
+		name="Salary Expected"
+		action="action_salary_extra_expected"
+	/>
+
+	<!-- Salary Extra Proposed -->
+	<!-- ===================== -->
+
+	<record id="salary_extra_proposed_form" model="ir.ui.view">
+		<field name="name">salary_extra_proposed_form</field>
+		<field name="model">salary.extra.proposed.master</field>
+		<field name="arch" type="xml">
+			<form string="Salary Proposed">
+				<sheet>
+					<group>
+						<field name="name" required="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="salary_extra_proposed_tree" model="ir.ui.view">
+		<field name="name">salary_extra_proposed_tree</field>
+		<field name="model">salary.extra.proposed.master</field>
+		<field name="arch" type="xml">
+			<tree string="Salary Proposed">
+				<field name="name"></field>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_salary_extra_proposed" model="ir.actions.act_window">
+		<field name="name">Salary Proposed</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">salary.extra.proposed.master</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem
+		id="menu_salary_extra_proposed"
+		sequence= "106"
+		parent="hr_recruitment.menu_hr_recruitment_configuration"
+		name="Salary Proposed"
+		action="action_salary_extra_proposed"
+	/>
+
+    <menuitem parent="hr_recruitment.menu_hr_recruitment_configuration" id="hr_recruitment.menu_hr_job_position" action="hr_recruitment.action_hr_job" sequence="200"/>
+
+    </data>
+</odoo>
