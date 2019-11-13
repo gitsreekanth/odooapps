@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		
+		<menuitem name="Final Settlement" id="menu_hr_gratuity_main" sequence="37" parent="hr.menu_hr_root"/>
+		
+        <!-- 	Inherited View for HR Employee  -->
+		<record id="view_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='work_location']" position="after">
+                    <field name="date_of_join" />
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="ep_hr_gratuity_rule_tree">
+            <field name="name">ep_hr_gratuity_rule_tree</field>
+            <field name="model">hr.gratuity.rule</field>
+            <field name="arch" type="xml">
+                <tree string="Gratuity Rule">
+                	<field name="year"/>
+                    <field name="days"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="ep_hr_gratuity_rule_form">
+            <field name="name">ep_hr_gratuity_rule_form</field>
+            <field name="model">hr.gratuity.rule</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Gratuity Rule">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="year" required="1"/>
+                            <field name="days"/>
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+
+       
+        
+        <record id="ep_hr_gratuity_rule_action" model="ir.actions.act_window">
+            <field name="name">Gratuity Rules</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.gratuity.rule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="ep_hr_gratuity_rule_tree"/>
+        </record>
+
+        
+        <menuitem name="Gratuity Rules"
+				  action="ep_hr_gratuity_rule_action" 
+				  id="ep_hr_gratuity_rule_menu"
+				  parent="menu_hr_gratuity_main"
+				  sequence="5"/>
+
+
+		
+
+        <!-- HR Gratuity -->
+        
+       <record model="ir.ui.view" id="view_hr_gratuity_tree">
+            <field name="name">hr.gratuity.tree</field>
+            <field name="model">hr.gratuity</field>
+            <field name="arch" type="xml">
+                <tree string="Gratuity">
+                    <field name="employee_id"/>
+                    <field name="last_working_date"/>
+                    <field name="type"/>
+		    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+         <record model="ir.ui.view" id="view_hr_gratuity_form">
+            <field name="name">hr.gratuity.form</field>
+            <field name="model">hr.gratuity</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Gratuity" >
+
+                   <header>
+                     	<button name="calculate_gratuity" string="Calculate Gratuity" states="draft" type="object" class="oe_highlight"/>                        
+						<button name="button_submit" string="Submit for Approval" states="draft" confirm="Are you sure you want to send the End of Service settlement for Approval?" type="object"/>
+						<button name="button_approve" string="Approve" states="waiting" confirm="Are you sure you want to approve the End of Service settlement?" type="object" class="oe_highlight"/>
+						<button name="button_reject" string="Reject" states="waiting" confirm="Are you sure you want to reject the End of Service settlement?" type="object"/>
+						<button name="button_cancel" string="Cancel" states="approved" confirm="Are you sure you want to Cancel the record?" type="object"/>
+						<button name="button_reset" string="Reset to Draft" states="cancelled" confirm="Are you sure you want to reset the record to Draft state?" type="object"/>                        
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,waiting,approved"/>
+                    </header> 
+
+                     <sheet>                        
+			<group colspan="4" col="4">
+				<field name="employee_id" required="1" attrs="{'readonly':[('state','not in',('draft'))]}" options="{'no_create':True}"/>
+				<field name="company_id" invisible="1"/>
+				<field name="last_working_date" required="1" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+				<field name="first_working_date" readonly="1"/>
+				<field name="type" required="1" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+				<field name="contract" required="1" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+				<field name="prepared_id" required="1" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+				<field name="approved_id" readonly="1"/>
+                	</group>
+                        
+			<notebook>
+	                        <page string="Settlement Details">
+					<separator string="Gratuity Details"/>
+					<field name="gratuity_line_ids" readonly="1">
+						<tree string="Gratuity Lines" editable="bottom">
+							<field name="contract_id" invisible="1"/>
+							<field name="date_from"/>
+							<field name="date_to"/>
+							<field name="total_days" sum="Total"/>
+							<field name="amount" sum="Total"/>
+						</tree>
+					</field>
+					<separator string="Additional Components"/>
+					<field name="gratuity_extra_lines" attrs="{'readonly':[('state','not in',('draft'))]}">
+	                                	<tree string="Additional Components" editable="bottom">
+							<field name="name" required="1"/>
+					                <field name="amount" required="1" sum="Total"/>
+	                                	</tree>
+					</field>
+                            	</page>
+	                        <page string="Other Details">
+					<separator string="Salary Details"/>
+					<field name="salary_detail_lines" readonly="1">
+						<tree string="Salary Details" readonly="1">
+							<field name="name"/>
+							<field name="monthly" sum="Total"/>
+							<field name="daily"/>
+						</tree>
+					</field>
+					<separator string="Leave Details"/>
+					<field name="leave_detail_lines" readonly="1">
+						<tree string="Leave Details" readonly="1">
+							<field name="name"/>
+							<field name="days"/>
+						</tree>
+					</field>
+                            	</page>
+                        </notebook>
+						
+			<group colspan="4" col="4">
+				<field name="total_eos_amount" string="Total End of Service Payment"/>
+                        </group>
+
+                    </sheet>
+					
+			<div class="oe_chatter">
+				<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+				<field name="message_ids" widget="mail_thread"/>
+			</div>
+					
+               </form>
+            </field>
+        </record>
+            
+        <record id="action_view_hr_gratuity" model="ir.actions.act_window">
+            <field name="name">Gratuity</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.gratuity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="view_hr_gratuity_tree"/>
+        </record>
+
+        <menuitem name="Gratuity Settlement"
+				  action="action_view_hr_gratuity"
+				  id="menu_action_view_hr_gratuity"
+				  parent="menu_hr_gratuity_main"
+				  sequence="1"/>
+
+	<!-- Report Template -->
+	<template id="template_end_of_service">
+		<t t-call="report.html_container">
+		<t t-foreach="docs" t-as="o">
+		<t t-call="feag_hr_gratuity.report_end_of_service" t-lang="'en_US'"/>
+		</t>
+		</t>
+	</template>
+
+	<report id="report_end_of_service_doc"
+		model="hr.gratuity"
+		string="EoS Payment Statement"
+		report_type="qweb-pdf"
+		name="feag_hr_gratuity.template_end_of_service"
+		file="feag_hr_gratuity.report_end_of_service"
+		attachment_use="True"
+	/>
+              
+  
+    </data>
+</odoo>

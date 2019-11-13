@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<template id="report_end_of_service">
+    <t t-call="report.external_layout">
+        <t t-set="o" t-value="o.with_context({'lang': 'en_US'})" />
+        <div class="page">
+            <div class="oe_structure"/>
+
+	   <!-- Header -->
+            <div class="row" styel="display: table !imporatant;">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="normal_title text-right">
+                                <span>End of Service Statement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+	   <!-- Employee Details -->
+            <div class="row top_buffer_20"></div>
+            <div class="row normal">
+                <div class="col-xs-12 normal">
+                    <strong> Employee Details </strong> 
+                </div>                
+            </div>
+            <table class="table table-borderless">
+                <thead class="blueheader_small">
+                    <tr>
+                        <th style="width:25% !important;">Employee Name</th>
+                        <th style="width:25% !important;">Contract</th>
+                        <th style="width:25% !important;">Position</th>
+                        <th style="width:25% !important;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="normal">
+                        <td><span class="normal_light" t-field="o.employee_id.name"/></td>
+                        <td><span class="normal_light" t-field="o.contract"/></td>
+                        <td><span class="normal_light" t-field="o.employee_id.job_id.name"/></td>
+                        <td><span class="normal_light" t-field="o.type"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+	   <!-- Employment Period -->
+	   <!-- Space -->
+	    <div class="row normal form_remarks">
+	        <div class="col-xs-12 normal"></div>
+	    </div>
+            <div class="row normal">
+                <div class="col-xs-12 normal">
+                    <strong> Employment Period </strong> 
+                </div>                
+            </div>
+            <table class="table table-borderless">
+                <thead class="blueheader_small">
+                    <tr>
+                        <th style="width:25% !important;">Employment Start Date</th>
+                        <th style="width:25% !important;">Employment End Date</th>
+                        <th style="width:25% !important;">Total Days</th>
+                        <th style="width:25% !important;">Completed Year of Service</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="normal">
+                        <td><span class="normal_light" t-field="o.first_working_date" t-field-options='{"format":"dd MMM YYYY"}'/></td>
+                        <td><span class="normal_light" t-field="o.last_working_date" t-field-options='{"format":"dd MMM YYYY"}'/></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+	   <!-- Salary Details -->
+	   <!-- Space -->
+	    <div class="row normal form_remarks">
+	        <div class="col-xs-12 normal"></div>
+	    </div>
+            <div class="row normal">
+                <div class="col-xs-12 normal">
+                    <strong> Salary Details </strong> 
+                </div>                
+            </div>
+            <table class="table table-border">
+                <thead class="blueheader_big">
+                    <tr>
+                        <th style="width:40% !important;">Salary Component</th>
+                        <th style="width:30% !important;" class="text-right">Month (AED)</th>
+                        <th style="width:30% !important;" class="text-right">Day (AED)</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.salary_detail_lines" t-as="l">
+                        <td class="normal text-left">
+                            <span class="normal_light" t-field="l.name"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.monthly"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.daily"/>
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+
+	   <!-- Total Gratuity -->
+            <table class="table table-borderless-total">
+                <tr>
+                    <td style="width:70% !important;" class="total_normal_borderless text-left">Gratuity payment for <span class="total_normal_borderless" t-field="o.gratuity_days"/> days of service <i>(refering article 132/134/137 UAE Labour Law)</i> </td>
+                    <td style="width:30% !important;" class="total_normal_borderless text-right">AED <span class="total_normal_borderless" t-field="o.gratuity_amount"/></td>
+                </tr>       
+            </table>
+
+	   <!-- Leave Details -->
+	   <!-- Space -->
+	    <div class="row normal form_remarks">
+	        <div class="col-xs-12 normal"></div>
+	    </div>
+            <div class="row normal">
+                <div class="col-xs-12 normal">
+                    <strong> Leave Details </strong> 
+                </div>                
+            </div>
+            <table class="table table-border">
+                <thead class="blueheader_big">
+                    <tr>
+                        <th style="width:70% !important;">Description</th>
+                        <th style="width:30% !important;" class="text-right">Day(s)</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.leave_detail_lines" t-as="l">
+                        <td class="normal text-left">
+                            <span class="normal_light" t-field="l.name"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.days"/>
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+
+	   <!-- Other Settlement Components -->
+	   <!-- Space -->
+	    <div class="row normal form_remarks">
+	        <div class="col-xs-12 normal"></div>
+	    </div>
+
+            <div class="row normal">
+                <div class="col-xs-12 normal">
+                    <strong> Other Settlement Components </strong> 
+                </div>
+            </div>
+            <table class="table table-border">
+                <thead class="blueheader_big">
+                    <tr>
+                        <th style="width:70% !important;">Description</th>
+                        <th style="width:30% !important;" class="text-right">Amount (AED)</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <tr t-foreach="o.gratuity_extra_lines" t-as="l">
+                        <td class="normal text-left">
+                            <span class="normal_light" t-field="l.name"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.amount"/>
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+
+	   <!-- Total EoS -->
+	   <!-- Space -->
+	    <div class="row normal form_remarks">
+	        <div class="col-xs-12 normal"></div>
+	    </div>
+
+            <table class="table table-borderless-total">
+                <tr>
+                    <td style="width:70% !important;" class="total_normal_borderless text-left"> <strong> Total End of Service Payment </strong> </td>
+                    <td style="width:30% !important;" class="total_normal_borderless text-right"> AED <span class="total_normal_borderless" t-field="o.total_eos_amount"/> </td>
+                </tr>       
+            </table>
+
+
+	    <!-- Signature -->
+            <div class="row normal form_signature">
+                <div class="col-xs-6 normal text-center">
+                    Prepared by 
+                </div>
+                <div class="col-xs-6 normal text-center">
+                    Approved by 
+                </div>                
+            </div>
+
+            <div class="row normal form_signature">
+                <div class="col-xs-6 normal text-center">
+                    <span class="normal_light" t-field="o.prepared_id.partner_id.ref"/>
+                </div>
+                <div class="col-xs-6 normal text-center">
+                    <span class="normal_light" t-field="o.approved_id.partner_id.ref"/>
+                </div>                
+            </div>
+
+
+        </div>
+    </t>
+</template>
+</data>
+</odoo>
