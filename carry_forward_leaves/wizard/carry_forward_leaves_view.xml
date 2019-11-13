@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="view_carry_forward_leaves_wizard" model="ir.ui.view">
+            <field name="name">Carry Forward Leaves</field>
+            <field name="model">carry.forward.leaves</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Carry Forward Leaves" >
+                	<group colspan="2">
+                		<label string="Carry Forward remaining annual leaves of the employees?"/>
+                	 </group>
+					<group>
+						<group>
+							<field name="year" options="{'no_create': True, 'no_open': True}"/>						
+                        	<field name="company_id" groups="hr_holidays.group_hr_holidays_manager" options="{'no_create': True, 'no_open': True}"/>
+                       	</group>
+                       	<group>
+                       		<field name="year_to" readonly="1"/>
+                       		<field name="max_carry_allowed" readonly="1"/>
+                       	</group>
+                    </group>
+                    <notebook>
+                    	<page string="Employee Details">
+                            <field name="carry_forward_lines" colspan="4" nolabel="1">
+                                <tree string="Employee Details" editable="top">
+                                    <field name="employee_id" />
+                                    <field name="leave_balance" readonly="1"/>
+                                    <field name="carry"/>
+                                    <field name="lapse"/>
+                                </tree>
+                            </field>
+			            </page>	
+                    </notebook>
+                    <footer>
+                        <button name="button_carry_forward_leaves" string="Proceed" type="object" class="oe_highlight"/>
+                        or 
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_carry_forward_leaves_wizard" model="ir.actions.act_window">
+            <field name="name">Carry Forward Leaves</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">carry.forward.leaves</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'readonly_by_pass': True}</field>
+        </record>
+			
+		<menuitem 
+            action="action_carry_forward_leaves_wizard"
+            id="menu_action_carry_forward_leaves_wizard"
+            parent="hr_holidays.menu_hr_holidays_approvals" 
+            sequence="41" groups="hr_holidays.group_hr_holidays_manager"/>
+
+    </data>
+</odoo>
