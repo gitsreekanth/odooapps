@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<template id="ep_report_invoice_document" inherit_id="account.report_invoice_document">
+    <xpath expr="//t[@t-call='report.external_layout']" position="replace">
+    <t t-call="report.external_layout">
+        <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <div class="row" styel="display: table !imporatant;">
+                <div class="col-xs-4 normal_light">                    
+                    <div class="row">
+                	<div class="col-xs-12 normal_light">Invoice Address</div>
+	                <div class="col-xs-12" t-if="o.partner_id.name"><span class="normal_light" t-field="o.partner_id.name"/></div>
+	                <div class="col-xs-12" t-if="o.partner_id.street"><span class="normal_light" t-field="o.partner_id.street"/></div>
+	                <div class="col-xs-12" t-if="o.partner_id.street2"><span class="normal_light" t-field="o.partner_id.street2"/></div>
+	                <div class="col-xs-12"> <span class="normal_light" t-field="o.partner_id.zip"/>  <span class="normal_light" t-field="o.partner_id.city"/></div>
+	                <div class="col-xs-12" t-if="o.partner_id.country_id"><span class="normal_light" t-field="o.partner_id.country_id.name"/></div>
+	                <div class="col-xs-12 normal_light" t-if="o.partner_id.phone">Phone <span class="normal_light" t-field="o.partner_id.phone"/></div>
+			<div class="col-xs-12 normal_light" t-if="o.partner_id.vat">TRN <span class="normal_light" t-field="o.partner_id.vat"/></div>
+		     </div>
+		 </div>
+                <div class="col-xs-4" t-if="o.second_address_id">
+                    <div class="row">
+                	<div class="col-xs-12 normal_light">Delivery Address</div>
+	                <div class="col-xs-12" t-if="o.second_address_id.name"><span class="normal_light" t-field="o.second_address_id.name"/></div>
+	                <div class="col-xs-12" t-if="o.second_address_id.street"><span class="normal_light" t-field="o.second_address_id.street"/></div>
+	                <div class="col-xs-12" t-if="o.second_address_id.street2"><span class="normal_light" t-field="o.second_address_id.street2"/></div>
+	                <div class="col-xs-12"> <span class="normal_light" t-field="o.second_address_id.zip"/>  <span class="normal_light" t-field="o.second_address_id.city"/></div>
+	                <div class="col-xs-12" t-if="o.second_address_id.country_id"><span class="normal_light" t-field="o.second_address_id.country_id.name"/></div>
+	                <div class="col-xs-12 normal_light" t-if="o.second_address_id.phone">Phone <span class="normal_light" t-field="o.second_address_id.phone"/></div>
+			<div class="col-xs-12 normal_light" t-if="o.second_address_id.vat">TRN <span class="normal_light" t-field="o.second_address_id.vat"/></div>
+		     </div>
+		</div>
+                <div class="col-xs-4" t-if="not o.second_address_id">
+		</div>
+                <div class="col-xs-4">
+                    <div class="row" name="invoice_address">
+                        <div class="col-xs-12">
+                            <div class="normal_title text-right">
+                                <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Tax Invoice</span>
+                                <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">Pro-Forma</span>
+                                <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                                <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                                <span t-if="o.type == 'out_refund'">Refund</span>
+                                <span t-if="o.type == 'in_refund'">Vendor Refund</span>
+                                <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
+                            </div>
+                            <div class="normal_light text-right">Invoice Number <span class="normal_light text-right" t-field="o.number"/></div>
+                            <div class="normal_light text-right">TRN <span class="normal_light text-right" t-field="o.company_id.vat"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row top_buffer_20"></div>
+            <table class="table table-borderless">
+                <thead class="blueheader_small">
+                    <tr>
+                        <th style="width:25% !important;">PO Number</th>
+                        <th style="width:25% !important;">Project</th>
+                        <th style="width:25% !important;">Invoice Date</th>
+                        <th style="width:25% !important;">Payment Terms</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="normal">
+                        <td><span class="normal_light" t-field="o.po_number"/></td>
+                        <td><div name="reference"><span class="normal_light" t-field="o.project_ref_id"/></div></td>
+                        <td><span class="normal_light" t-field="o.date_invoice" t-field-options='{"format":"dd MMM YYYY"}'/></td>
+                        <td><span class="normal_light" t-field="o.payment_term_id.name"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-borderless">
+                <thead class="blueheader_small">
+                    <tr>
+                        <th style="width:25% !important;">Vendor Number</th>
+                        <th style="width:25% !important;">DN Number</th>
+                        <th style="width:25% !important;">DN Date</th>
+                        <th style="width:25% !important;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="normal">
+                        <td><span class="normal_light" t-field="o.vendor_number"/></td>
+                        <td><span class="normal_light" t-field="o.dn_number"/></td>
+                        <td><span class="normal_light" t-field="o.dn_date" t-field-options='{"format":"dd MMM YYYY"}'/></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Is there a discount on at least one line? -->
+            <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+
+            <table class="table table-border">
+                <thead class="blueheader_big">
+                    <tr>
+                        <th style="width:3% !important;">Pos</th>
+                        <th style="width:10% !important;">Item</th>
+                        <th style="width:28% !important;">Description</th>
+                        <th style="width:7% !important;">Quantity</th>
+                        <th style="width:7% !important;" class="text-right">VAT %</th>
+                        <th style="width:8% !important;" class="text-right">VAT Amt</th>
+                        <th style="width:10% !important;" class="text-right">Unit Price</th>
+                        <th style="width:12% !important;" class="text-right">Net Total</th>
+                        <!--<th style="width:15% !important;" class="text-right">Curr Claim (<span t-if="o.project_payent_perc" t-field="o.project_payent_perc"/>%)</th>-->
+			<th style="width:15% !important;" class="text-right"> Curr Claim <span t-if="o.project_payent_perc"/> (<span t-field="o.project_payent_perc"/> %)</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <t t-set="i" t-value="1" />
+                    <tr t-foreach="o.invoice_line_ids" t-as="l">
+                        <td class="normal text-center">
+                            <span t-esc="i"></span>
+                        </td>
+                        <td class="normal text-left">
+                            <span class="normal_light" t-field="l.item_no"/>
+                        </td>
+                        <td class="normal text-left">
+                            <span class="normal_light" t-field="l.name"/>
+                        </td>
+                        <td class="normal text-left">
+                            <span class="normal_light" t-field="l.quantity"/>    
+                            <span class="normal_light" t-field="l.uom_id.name"/>                        
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.tax_amount"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.so_price_unit"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.so_net_total"/>
+                        </td>
+                        <td class="normal text-right">
+                            <span class="normal_light" t-field="l.price_subtotal"/>
+                        </td>
+                         <t t-set="i" t-value="i+1"/>
+                    </tr>                    
+                </tbody>
+            </table>
+
+<!-- NEW START -->
+            <table class="table table-borderless-total">
+                <tr>
+                    <td style="width:55% !important;"></td>
+                    <td style="width:30% !important;" class="total_normal_borderless text-left">Total Net excl VAT</td>
+                    <td style="width:15% !important;" class="total_normal_borderless text-right"><span class="total_normal_borderless" t-field="o.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                </tr>
+                <tr>
+                    <td style="width:55% !important;"></td>
+                    <td style="width:30% !important;" class="total_normal_borderless text-left">Total VAT</td>
+                    <td style="width:15% !important;" class="total_normal_borderless text-right"><span class="total_normal_borderless" t-field="o.amount_tax"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                </tr>
+                <tr>
+                    <td style="width:55% !important;"></td>
+                    <td style="width:30% !important;" class="total_blue_borderless text-left">Total Net incl VAT</td>
+                    <td style="width:15% !important;" class="total_blue_borderless text-right"><span class="total_blue_borderless" t-field="o.amount_total"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                </tr>                
+            </table>
+<!-- NEW END -->
+
+                <!--<thead class="blueheader_big">
+                    <tr>
+                        <th class="text-right" colspan="6">Total Untaxed</th>
+                        <th class="text-right"><span t-field="o.total_so_net_total"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></th>
+                        <th class="text-right"><span t-field="o.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></th>
+                    </tr>
+                    <tr>
+                        <th class="text-right" colspan="6">Total VAT</th>
+                        <th class="text-right"></th>
+                        <th class="text-right"><span t-field="o.amount_tax"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></th>
+                    </tr>
+                    <tr>
+                        <th class="text-right" colspan="6">Total Invoice</th>
+                        <th class="text-right"></th>
+                        <th class="text-right"><span t-field="o.amount_total"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></th>
+                    </tr>
+                </thead>
+            </table>-->
+
+            <div class="row normal form_remarks" t-if="o.comment">
+                <div class="col-xs-12">
+                    <strong>Note:</strong>
+                </div>
+                <div class="col-xs-12">
+                    <p t-field="o.comment"/>
+                </div>                        
+            </div>
+            <div class="row normal form_remarks">
+                <div class="col-xs-12 normal"><strong>Thank you for your business! </strong></div>
+                <div class="col-xs-12 normal"><strong>Bank Account Details</strong></div>
+                <div class="col-xs-12 normal">Name of Bank: <span class="normal_light" t-field='o.invoice_bank_id.bank_id.name'/></div>
+                <div class="col-xs-12 normal">Account No: <span class="normal_light" t-field='o.invoice_bank_id.acc_number'/></div>
+                <div class="col-xs-12 normal">Swift Code: <span class="normal_light" t-field='o.invoice_bank_id.bank_id.bic'/></div>
+                <!--<div class="col-xs-12 normal">Telephone No: <span class="normal_light" t-field='o.invoice_bank_id.bank_id.phone'/></div>-->
+                <div class="col-xs-12 normal">IBAN: <span class="normal_light" t-field='o.invoice_bank_id.iban_no'/></div>                
+            </div>  
+            <div class="row normal form_signature">
+                <div class="col-xs-12 normal">
+                    Approved by 
+                </div>                
+            </div>          
+        </div>
+    </t>
+    </xpath>
+</template>
+</data>
+</odoo>

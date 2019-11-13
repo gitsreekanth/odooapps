@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="partner_view_buttons_inherit1">
+            <field name="name">partner_view_buttons_inherit1</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_buttons" />
+            <field name="arch" type="xml">
+
+		<button name="open_partner_history" position="replace">
+                    <button type="object"
+                        class="oe_stat_button"
+                        id="account.invoice_button"
+                        icon="fa-pencil-square-o"
+                        name="open_partner_history"
+                        attrs="{'invisible': [('customer', '=', False)]}"
+                        context="{'default_partner_id': active_id}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value"><field name="sale_invoice_count"/></span>
+                            <span class="o_stat_text">Invoices</span>
+                        </div>
+                    </button>
+		</button>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

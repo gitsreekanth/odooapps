@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="payment_commit_report_pivot" model="ir.ui.view">
+            <field name="name">payment_commit_report_pivot</field>
+            <field name="model">payment.commit.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Cash Flow Report" disable_linking="True">
+                    <field name="date" interval="month" type="col"/>
+                    <field name="amount" type="measure" widget="integer"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="payment_commit_report_search" model="ir.ui.view">
+            <field name="name">payment_commit_report_search</field>
+            <field name="model">payment.commit.report</field>
+            <field name="arch" type="xml">
+		<search string="Search Report">
+                    <filter domain="[('pay_priority','in',('assured','planned','unlikely','mandatory','planned','deviating'))]" help="Best Case"/>
+                    <filter domain="[('pay_priority','in',('assured','planned','mandatory','planned'))]" help="Most Likely"/>
+                    <filter domain="[('pay_priority','in',('assured','mandatory'))]" help="Worst Case"/>
+		    <!--<separator/>
+                    <filter domain="[('pay_priority','=','assured')]" help="Assured Receipt"/>
+                    <filter domain="[('pay_priority','=','planned')]" help="Planned Receipt"/>
+                    <filter domain="[('pay_priority','=','unlikely')]" help="Unlikely Receipt"/>
+		    <separator/>
+                    <filter domain="[('pay_priority','=','mandatory')]" help="Mandatory Payment"/>
+                    <filter domain="[('pay_priority','=','planned')]" help="Planned Payment"/>
+                    <filter domain="[('pay_priority','=','deviating')]" help="Deviating Payment"/>-->
+               </search>
+            </field>
+        </record>
+
+        <record id="payment_commit_report_action" model="ir.actions.act_window">
+             <field name="name">Cash Flow Report</field>
+             <field name="res_model">payment.commit.report</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">pivot</field>
+	     <field name="view_ids"
+	   	    eval="[(5, 0, 0),
+		    (0, 0, {'view_mode': 'pivot', 'view_id': ref('payment_commit_report_pivot')})]"/>
+        </record>
+
+        <record id="filter_payment_commit_report1" model="ir.filters">
+            <field name="name">Cash Flow</field>
+            <field name="model_id">payment.commit.report</field>
+            <field name="user_id" eval="False"/>
+	    	<field name="is_default">True</field>
+		<field name="context">{u'pivot_column_groupby': [u'date:month'], u'pivot_row_groupby': ['type', 'subtype'], u'pivot_measures': [u'amount']}</field>
+        </record>
+
+        <record id="filter_payment_commit_report2" model="ir.filters">
+            <field name="name">Overdue</field>
+            <field name="model_id">payment.commit.report</field>
+            <field name="user_id" eval="False"/>
+		<field name="context">{u'pivot_column_groupby': [u'due_date:month'], u'pivot_row_groupby': ['type', 'subtype'], u'pivot_measures': [u'amount']}</field>
+		<field name="domain">[('due_date','&lt;',datetime.datetime.now().strftime('%Y-%m-%d 00:00:00'))]</field>
+        </record>
+
+        <menuitem id="payment_commit_report_menu" name="Cash Flow Report"
+            parent="account.account_reports_business_intelligence_menu" action="payment_commit_report_action" sequence="602"/>
+
+</odoo>

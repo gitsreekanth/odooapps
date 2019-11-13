@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+	<!-- Customer Invoice -->        
+	<record id="ep_invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='name']" position="after">
+                    <field name="item_no"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='price_unit']" position="after">
+                    <field name="so_price_unit"/>
+                    <field name="so_net_total"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='invoice_line_tax_ids']" position="after">
+                    <field name="tax_amount"/>
+                </xpath>
+                <xpath expr="//page[@name='other_info']//field[@name='move_id']" position="before">
+                    <field name="invoice_bank_id"/>
+                    <field name="project_payent_perc"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="before">
+                    <field name="second_address_id"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_untaxed']" position="before">
+                    <field name="total_so_net_total"/>
+                </xpath>
+                <xpath expr="//field[@name='date_invoice']" position="after">
+                    <field name="po_number"/>
+                    <field name="project_ref_id"/>
+                    <field name="vendor_number"/>
+                    <field name="dn_number"/>
+                    <field name="dn_date"/>
+                </xpath>
+                <xpath expr="//field[@name='date_due']" position="after">
+			<field name="ci_pay_probability"/>
+			<field name="pay_commit_lines">                
+				<tree editable="bottom" string="Payment Commitment">
+		                    <field name="date" required="1"/>
+		                    <field name="amount" required="1" sum="total"/>
+		                </tree>
+			</field>
+			<field name="commit_due_match" invisible="1"/>
+			<label colspan="2"
+				string="Payment Commitment amount not matching with Amount Due"
+				attrs="{'invisible': [('commit_due_match','=', True)]}" style="color:red;"/>
+                </xpath>
+
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="statusbar_visible">validate,draft,open,paid</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_open']" position="before">
+                    <button name="action_invoice_validate" 
+                            states="draft,proforma2"
+                            string="Approve"
+                            type="object"
+                            class="oe_highlight"
+			    			groups="base.group_ar_approve"/>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_open']" position="attributes">                   
+                   <attribute name="states">proforma2,validate</attribute>
+                </xpath>
+            </field>
+        </record>
+
+	<record id="amg_invoice_form_cancel" model="ir.ui.view">
+            <field name="name">amg_invoice_form_cancel</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_form_cancel_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_cancel']" position="attributes">                   
+                   <attribute name="states">draft,proforma2,open,validate</attribute>
+                </xpath>
+            </field>
+        </record>
+
+	<!-- Vendor Bill -->
+        <record id="vendor_invoice_bill" model="ir.ui.view">
+            <field name="name">account.vendor.bill</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="statusbar_visible">confirmed,validate,draft,open,paid</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_open']" position="before">
+                    <button name="action_invoice_confirm" 
+                            states="draft,proforma2"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"/>
+                    <button name="action_invoice_validate" 
+                            states="confirmed"
+                            string="Approve"
+                            type="object"
+                            class="oe_highlight"
+			    groups="base.group_ap_approve"/>
+                    <button name="action_quick_pay" 
+                            states="open"
+                            string="Cash Payment"
+                            type="object"
+                            confirm="Are you sure you want to mark the Bill as Paid with Cash Payment?"
+			    groups="base.group_ap_approve"/>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_open']" position="attributes">                   
+                   <attribute name="states">validate</attribute>
+                </xpath>
+                <xpath expr="//field[@name='reference']" position="attributes">                   
+                   <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_invoice']" position="attributes">                   
+                   <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_due']" position="attributes">                   
+                   <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+			<field name="vb_pay_priority"/>
+			<field name="pay_commit_lines">                
+				<tree editable="bottom" string="Payment Commitment">
+		                    <field name="date" required="1"/>
+		                    <field name="amount" required="1" sum="total"/>
+		                </tree>
+			</field>
+			<field name="commit_due_match" invisible="1"/>
+			<label colspan="2"
+				string="Payment Commitment amount not matching with Amount Due"
+				attrs="{'invisible': [('commit_due_match','=', True)]}" style="color:red;"/>
+                </xpath>
+
+            </field>
+        </record>
+
+	<record id="amg_invoice_supplier_cancel_form" model="ir.ui.view">
+            <field name="name">amg_invoice_supplier_cancel_form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_supplier_cancel_form_inherit" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_cancel']" position="attributes">                   
+                   <attribute name="states">draft,proforma2,open,confirmed,validate</attribute>
+                </xpath>
+            </field>
+        </record>
+
+	<record id="view_account_invoice_filter_amg1" model="ir.ui.view">
+            <field name="name">view_account_invoice_filter_amg1</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter" />
+            <field name="arch" type="xml">
+		<xpath expr="//field[@name='journal_id']" position="after">
+			<field name="account_analytic_id"/>
+		</xpath>
+            </field>
+        </record>
+	
+	<!-- Messaging -->
+	<record id="mt_invoice_confirmed" model="mail.message.subtype">
+		<field name="name">Invoice waiting Approval</field>
+		<field name="res_model">account.invoice</field>
+		<field name="default" eval="False"/>
+		<field name="hidden" eval="True"/>
+		<field name="description">Invoice waiting Approval</field>
+	</record>
+
+    </data>
+</odoo>

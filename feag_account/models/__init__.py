@@ -1,0 +1,6 @@
+import account_invoice
+import journal_entry
+import res_partner
+import dashboard
+import other_cf_config
+import pay_commit_report

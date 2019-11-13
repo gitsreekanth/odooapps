@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+		<!-- ================ -->
+		<!-- Cash Flow Inputs -->
+		<!-- ================ -->
+
+		<!-- Form -->
+		<record id="account_other_cashflow_form" model="ir.ui.view">
+			<field name="name">account_other_cashflow_form</field>
+			<field name="model">account.other.cashflow</field>
+			<field name="arch" type="xml">
+				<form string="Cashflow Inputs">
+
+	                <header>
+	                    <field name="state" widget="statusbar" clickable="True"/>
+	                </header>
+
+					<sheet>
+						<group>
+							<group>
+								<field name="date" required="1"/>
+								<field name="amount" required="1"/>
+								<field name="pay_priority" required="1"/>
+							</group>
+							<group>
+								<field name="other_cf_categ_id" required="1" options="{'no_create':true,'no_open':True}"/>
+								<field name="account_id" required="1" options="{'no_create':true,'no_open':True}"/>
+								<field name="partner_id" options="{'no_create':true,'no_open':True}"/>
+							</group>
+						</group>
+					</sheet>
+
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
+
+				</form>
+			</field>
+		</record>
+
+        <!--Tree-->
+        <record id="account_other_cashflow_tree" model="ir.ui.view">
+            <field name="name">account_other_cashflow_tree</field>
+            <field name="model">account.other.cashflow</field>
+            <field name="arch" type="xml">
+                <tree string="Cashflow Inputs">
+                    <field name="date"/>
+                    <field name="other_cf_categ_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action-->
+        <record id="action_account_other_cashflow" model="ir.actions.act_window">
+            <field name="name">Cashflow Inputs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.other.cashflow</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+		<!-- Menu-->
+        <menuitem
+            id= "menu_account_other_cashflow"
+            sequence= "650"
+            parent="account.account_reports_business_intelligence_menu"
+            name= "Cashflow Inputs"
+            action="action_account_other_cashflow"
+		/>
+
+		<!-- ======================= -->
+		<!-- Cash Flow Configuration -->
+		<!-- ======================= -->
+
+		<!-- Form -->
+		<record id="account_other_cashflow_categ_form" model="ir.ui.view">
+			<field name="name">account_other_cashflow_categ_form</field>
+			<field name="model">account.other.cashflow.categ</field>
+			<field name="arch" type="xml">
+				<form string="Cashflow Setting">
+
+					<sheet>
+						<group>
+							<field name="name" required="1"/>
+							<field name="other_cashflow_main_categ_id" required="1"/>
+						</group>
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+        <!--Tree-->
+        <record id="account_other_cashflow_categ_tree" model="ir.ui.view">
+            <field name="name">account_other_cashflow_categ_tree</field>
+            <field name="model">account.other.cashflow.categ</field>
+            <field name="arch" type="xml">
+                <tree string="Cashflow Setting">
+                    <field name="other_cashflow_main_categ_id"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action-->
+        <record id="action_account_other_cashflow_categ" model="ir.actions.act_window">
+            <field name="name">Cashflow Setting</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.other.cashflow.categ</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+		<!-- Menu-->
+        <menuitem
+            id= "menu_account_other_cashflow_categ"
+            sequence= "651"
+            parent="account.account_reports_business_intelligence_menu"
+            name= "Cashflow Setting"
+            action="action_account_other_cashflow_categ"
+		/>
+
+    </data>
+</odoo>

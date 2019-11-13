@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    
+    <!-- inheriting to add  -->
+    <record id="ep_view_res_bank_form" model="ir.ui.view">
+        <field name="name">res.bank.form</field>
+        <field name="model">res.bank</field>
+         <field name="inherit_id" ref="base.view_res_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bic']" position="attributes">
+                <attribute name="string">SWIFT Code</attribute>
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bic']" position="after">
+                <field name="routing_code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ep_view_partner_bank_form" model="ir.ui.view">
+        <field name="name">res.partner.bank.form</field>
+        <field name="model">res.partner.bank</field>
+         <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='acc_number']" position="after">
+                <field name="iban_no"/>
+                <field name="is_invoice"/>
+            </xpath>
+            <xpath expr="//field[@name='bank_id']" position="after">
+                <field name="branch_name"/>
+            </xpath>
+        </field>
+    </record>
+    
+    
+        
+
+    </data>
+</odoo>
